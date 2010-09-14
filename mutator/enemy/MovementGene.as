@@ -30,7 +30,7 @@
 			enemy.velocity.setVector2D(0,0)
 		}
 		
-		public function executeOn(enemy:EnemyShip) {
+		public function executeOn(enemy:EnemyShip):void {
 			//enemy.x += movement.x
 			//enemy.y += movement.y
 			enemy.velocity.setByVector2D(movement)
