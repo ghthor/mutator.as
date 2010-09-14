@@ -2,6 +2,7 @@
 	import mutator.enemy.Gene;
 	import wcl.math.RandomFloat;
 	import wcl.math.Vector2D;
+	import wcl.randomization.Weight;
 	
 	/**
 	 * ...
@@ -16,6 +17,8 @@
 		static const MIN_SPEED:Number = 5
 		static const MAX_SPEED:Number = 10		
 		public static const type:String = "Movement"
+		
+		public static var poolWeight:Weight = new Weight(1, type)
 		
 		public function MovementGene() {
 			movement = Vector2D.NewWithAngleAndMag(RandomFloat.within(0,360), RandomFloat.within(MIN_SPEED, MAX_SPEED))
