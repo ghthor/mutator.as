@@ -13,6 +13,15 @@
 			item.id = idCounter++
 			super(item)
 		}
+		
+		public static function geneFromType(type:String):Gene {
+			switch(type) {
+				case MovementGene.type:
+					break
+				default:
+					return new MovementGene()
+			}
+		}
 	}
 	
 }

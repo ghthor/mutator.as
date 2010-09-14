@@ -1,25 +1,45 @@
 ﻿package mutator.enemy {
+	import mutator.enemy.Gene;
+	import wcl.math.RandomFloat;
 	import wcl.math.Vector2D;
 	
 	/**
 	 * ...
-	 * @author ...
+	 * @author Will Walthall
 	 */
+	
+	// Really really basic, Need to test this to see how it works
 	public class MovementGene implements Gene {
 		
-		public var movement:Vector2D
+		var movement:Vector2D
 		
-		const MAX_SPEED:Number = 200
+		static const MIN_SPEED:Number = 5
+		static const MAX_SPEED:Number = 10		
+		public static const type:String = "Movement"
 		
 		public function MovementGene() {
+			movement = Vector2D.NewWithAngleAndMag(RandomFloat.within(0,360), RandomFloat.within(MIN_SPEED, MAX_SPEED))
 		}
 		
 		/* INTERFACE mutator.enemy.Gene */
 		
-		public function executeOn(enemy:EnemyShip){
+		public function enter(enemy:EnemyShip):void {			
+		}
+		
+		public function exit(enemy:EnemyShip):void {
+			enemy.velocity.setVector2D(0,0)
+		}
+		
+		public function executeOn(enemy:EnemyShip) {
 			//enemy.x += movement.x
 			//enemy.y += movement.y
-			enemy.velocity = movement
+			enemy.velocity.setByVector2D(movement)
+		}
+		
+		public function clone():Gene {
+			var c:MovementGene = new MovementGene()
+			c.movement = movement.cloneAsVector2D()
+			return c
 		}
 		
 	}
