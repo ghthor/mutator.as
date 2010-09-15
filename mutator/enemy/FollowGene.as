@@ -10,11 +10,13 @@ package mutator.enemy {
 	public class FollowGene extends MovementGene implements Gene {
 		public static const type:String = "Follow"
 		
+		public static var poolWeight:Weight = new Weight(1, type)
+		
 		static const MIN_FOLLOW_DIST:Number = 50
 		static const MAX_FOLLOW_DIST:Number = 400
 		static const MAX_FOLLOW_SPEED:Number = MAX_SPEED + 2
 		
-		var followSpeed:Number = RandomFloat.within(MIN_SPEED, MAX_FOLLOW_SPEED)
+		var followSpeed:Number = RandomFloat.within(MIN_SPEED, MAX_FOLLOW_SPEED)		
 		
 		public function FollowGene():void {
 			super()

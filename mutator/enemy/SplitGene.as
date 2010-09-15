@@ -9,6 +9,8 @@ package mutator.enemy {
 	public class SplitGene implements Gene {
 		public static const type:String = "Split"
 		
+		public static var poolWeight:Weight = new Weight(0, type)
+		
 		/* INTERFACE mutator.enemy.Gene */
 		
 		private var alreadySplit:Boolean = false
@@ -21,7 +23,7 @@ package mutator.enemy {
 			alreadySplit = false
 		}
 		
-		public function executeOn(enemy:EnemyShip){
+		public function executeOn(enemy:EnemyShip):void {
 			if (!alreadySplit) {
 				// enemy.Split()
 				alreadySplit = true

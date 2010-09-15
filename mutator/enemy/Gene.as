@@ -4,7 +4,7 @@
 		
 		function enter(enemy:EnemyShip):void
 		function exit(enemy:EnemyShip):void
-		function executeOn(enemy:EnemyShip)
+		function executeOn(enemy:EnemyShip):void
 		function clone():Gene
 	}
 }
