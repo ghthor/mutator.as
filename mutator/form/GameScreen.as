@@ -13,6 +13,7 @@
 	import mutator.enemy.BreedStats;
 	import mutator.enemy.EnemyShip;
 	import mutator.enemy.GenePool;
+	import mutator.enemy.ScaleGene;
 	import mutator.OrbitingBullet;
 	import mutator.Ship;
 	import mutator.statistic.Oscillator;
@@ -99,11 +100,11 @@
 				case "e":
 					spawnEnemy(BreedStats.breedFromPool())
 					break
-				case "r":
-					BreedStats.sortBreeds()
+				case "w":
+					BreedStats.newGeneration()
 					break
 				case "n":
-					BreedStats.newGeneration()
+					BreedStats.resetWithFreshGeneration()
 					break
 			}
 			switch(e.keyCode) {
@@ -140,6 +141,9 @@
 			var enemyShips:Array = EnemyShip.allAlive
 			for (var i:int = 0; i < enemyShips.length; i++) {
 				enemyShips[i].tick(1.0)
+				if (enemyShips[i].scaleX < ScaleGene.MIN) {
+					trace("Scale less then min, theres a bug somewhere!")
+				}
 			}
 			var allBullets:Array = OrbitingBullet.allBullets
 			for (var i:int = 0; i < allBullets.length; i++) {

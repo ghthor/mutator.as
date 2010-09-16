@@ -43,22 +43,28 @@
 			return stats.averageTimeAlive
 		}
 		
-		public function initialize(withDna:DnaArray = null):void {
-			if (withDna == null) {
-				withDna = genePool.newDna()
-			}
+		public function initialize(withDna:DnaArray, andStats:BreedStats = null):void {
 			dna = withDna
-			dna.startGene.executeOn(this)
-			dna.geneAt(executeGene).enter(this)
 			
-			stats = new BreedStats()
-			stats.dna = dna
-			
+			// This is executed when a newBreed is created
+			if (andStats == null) {
+				stats = new BreedStats()
+				stats.dna = dna
+			} else {
+				stats = andStats
+				
+				// if andStats wasn't passed then this is a dns clone and isn't the one associated with stats
+				dna.startGene.executeOn(this)
+				dna.geneAt(executeGene).enter(this)
+			}			
 			addChild(draw)
 		}
 		
 		public static function newBreed(withDna:DnaArray = null):EnemyShip {
 			var breed:EnemyShip = new EnemyShip()
+			if (withDna == null) {
+				withDna = genePool.newDna()
+			}
 			breed.initialize(withDna)
 			return breed
 		}
@@ -116,20 +122,36 @@
 		
 		public function split():void {
 			var c:EnemyShip = clone()
+			// when we split, we want the scale to be that of the cloned
+			c.scaleX = scaleX
+			c.scaleY = scaleY
+			
+			// and the location to be the same
+			// may have this be conditional based on velocity for an added effect
+			c.x = x
+			c.y = y
+			
+			// we also have the life of the cloned
+			c.ticksLived = ticksLived
+			
+			// It is alive and on screen
 			parent.addChild(c)
 			allAlive.push(c)
 		}
 		
+		override public function get scaleX():Number { return super.scaleX; }
+		
+		override public function set scaleX(value:Number):void {
+			if (value == 0) {
+				trace("What is setting this to 0?")
+			}
+			super.scaleX = value;
+		}
+		
 		public function clone():EnemyShip {
 			var c:EnemyShip = new EnemyShip()
-			c.x = x
-			c.y = y
-			//c.velocity = velocity.cloneAsVector2D()
-			c.dna = dna.clone()
-			c.ticksLived = ticksLived
-			c.stats = stats
-			
-			c.addChild(c.draw)
+			// clone dna and use the same stats object
+			c.initialize(dna.clone(),stats)
 			return c
 		}
 		

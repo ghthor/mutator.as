@@ -1,4 +1,4 @@
-package mutator.enemy {
+﻿package mutator.enemy {
 	import mutator.enemy.Gene;
 	import mutator.enemy.EnemyShip;
 	import mutator.statistic.Oscillator;
@@ -15,8 +15,8 @@ package mutator.enemy {
 		
 		public static var poolWeight:Weight = new Weight(1,type)
 		
-		static const MIN:Number = .4
-		static const MAX:Number = 1.5
+		public static const MIN:Number = .4
+		public static const MAX:Number = 1.5
 		
 		var scale:Oscillator
 		var target:Number
@@ -32,6 +32,9 @@ package mutator.enemy {
 			scale.setMinMaxWithRandoms(enemy.scaleX, target)
 			scale.period = EnemyShip.TICKS_PER_GENE/2
 			scale.start = enemy.scaleX
+			if (enemy.scaleX == 0) {
+				trace("ScaleX == 0 ????")
+			}
 		}
 		
 		public function exit(enemy:EnemyShip):void{

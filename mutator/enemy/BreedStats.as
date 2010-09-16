@@ -16,6 +16,13 @@ package mutator.enemy {
 			newGeneration()
 		}
 		
+		public static function resetWithFreshGeneration():void {
+			// clear allBreeds to make room for the next Gen
+			allBreeds.splice(0, allBreeds.length)
+			// newGeneration generates all new random breeds if allBreeds.length == 0
+			newGeneration()
+		}
+		
 		public static const MAX_BREEDS:uint = 10
 		public static function newGeneration():void {
 			if ( allBreeds.length != 0 ) {
@@ -25,6 +32,7 @@ package mutator.enemy {
 				// clear allBreeds to make room for the next Gen
 				allBreeds.splice(0, allBreeds.length)
 				
+				// Pick the top four best performers for breeding
 				var bestPerformers:Array = breedsSorted.splice(0, 4)
 				
 				var newDna:DnaArray
@@ -56,7 +64,10 @@ package mutator.enemy {
 			for (var i:int = 0; i < aliveTimes.length; i++) {
 				total += aliveTimes[i]
 			}
-			avgTimeAlive = total/aliveTimes.length
+			avgTimeAlive = total / aliveTimes.length
+			if (isNaN(avgTimeAlive)) {
+				avgTimeAlive = 0
+			}
 			return avgTimeAlive
 		}
 		

@@ -39,7 +39,8 @@ package mutator.enemy {
 		}
 		
 		public function executeOn(enemy:EnemyShip):void{
-			enemy.x = startZone*startZoneLength + startOffset
+			enemy.x = startZone * startZoneLength + startOffset
+			enemy.y = 0
 		}
 		
 		public function clone():Gene{
