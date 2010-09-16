@@ -12,7 +12,17 @@ package mutator.enemy {
 	 */
 	public class WeaponGene implements Gene {
 		public static const type:String = "WeaponGene"		
-		public static var poolWeight:Weight = new Weight(1, type)
+		public static var poolWeight:Weight = new Weight(2, type)
+		
+		static const INCREASE_CHANCE_DELTA:Number = .025
+		
+		public static function increaseChance():void {
+			poolWeight.weight += INCREASE_CHANCE_DELTA
+		}
+		
+		public static function decreaseChance():void {
+			poolWeight.weight -= (INCREASE_CHANCE_DELTA / 2)
+		}
 		
 		var weaponType:String = Missle.typeStr
 		var ticksPerFire:int = EnemyShip.TICKS_PER_GENE - 1
@@ -35,7 +45,7 @@ package mutator.enemy {
 				var missle:Missle = new Missle()
 				var leadVect:Vector2D = GameScreen.ship.velocity.cloneAsVector2D()
 				leadVect.makeLength(leadDistance)
-				missle.initialize(enemy.x, enemy.y, GameScreen.ship.x + leadVect.x, GameScreen.ship.y + leadVect.y)
+				missle.initialize(enemy.x, enemy.y, GameScreen.ship.x + leadVect.x, GameScreen.ship.y + leadVect.y, enemy.stats)
 				Missle.spawn(missle)
 			}
 			ticks++

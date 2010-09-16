@@ -37,6 +37,9 @@
 		public static const SCROLL_SPEED:Number = 5
 		public static var constMovement:Vector2D = new Vector2D(0, SCROLL_SPEED)
 		
+		public static var gui_scale:TextField
+		public static var gui_kills_till_evolution:TextField
+		
 		private static var me:GameScreen
 		public static function addObject(displayObject:DisplayObject):DisplayObject {
 			return me.addChild(displayObject)
@@ -46,8 +49,6 @@
 		var canvas:Canvas = new Canvas()
 		
 		public static var ship:Ship = new Ship()
-		
-		public var gui_lives:TextField;
 		
 		public function GameScreen() {
 			stop();
@@ -68,6 +69,8 @@
 		/// Run After All Forms Have Been Created
 		public function initialize():void {
 			me = this
+			gui_scale = _gui_scale
+			gui_kills_till_evolution = _gui_kills
 			GenePool.initialize()
 			BreedStats.initialize()
 			
@@ -139,7 +142,24 @@
 		}
 		
 		var fireTickCount:int = 0
-		var ticksPerFire:int = 10
+		var ticksPerFire:int = 8
+		
+		public static var MIN_TIME_TILL_SPAWN:Number = 10
+		public static var MAX_TIME_TILL_SPAWN:Number = 180
+		
+		public static function decreaseSpawnTime():void {
+			MAX_TIME_TILL_SPAWN -= .25
+			MIN_TIME_TILL_SPAWN -= .025
+			
+			if (MIN_TIME_TILL_SPAWN < 4) {
+				MIN_TIME_TILL_SPAWN = 4
+			}
+			if (MAX_TIME_TILL_SPAWN < 10) {
+				MAX_TIME_TILL_SPAWN = 10
+			}
+		}
+		
+		var timeTillSpawn:Number = RandomFloat.within(MIN_TIME_TILL_SPAWN, MAX_TIME_TILL_SPAWN)
 		private function tick(e:Event):void {
 			
 			if (shipFiring) {
@@ -148,6 +168,13 @@
 					fireTickCount = 0
 					ship.fire(this)
 				}
+			}
+			
+			if (timeTillSpawn < 0 ) {
+				timeTillSpawn = RandomFloat.within(MIN_TIME_TILL_SPAWN, MAX_TIME_TILL_SPAWN)
+				spawnEnemy(BreedStats.breedFromPool())
+			} else {
+				timeTillSpawn -= 1
 			}
 			
 			var enemyShips:Array = EnemyShip.allAlive

@@ -29,6 +29,7 @@ package mutator.enemy {
 		public function breed(otherDna:DnaArray):DnaArray {
 			var newDna:DnaArray
 			
+			/// Need to check all these to make sure they are working as intended
 			switch(Math.floor(RandomFloat.within(0, 4))) {
 				case 1:
 					newDna = breedInterlace(otherDna)

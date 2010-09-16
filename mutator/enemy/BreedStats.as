@@ -12,6 +12,7 @@ package mutator.enemy {
 		var amountOfDeaths:Number = 0
 		public var avgTimeAlive:Number = 0
 		var dna:DnaArray
+		public var numberOfHits:Number = 0
 		
 		static var allBreeds:Array = new Array()
 		static var newBreedChance:WeightedPool = new WeightedPool()
@@ -30,7 +31,7 @@ package mutator.enemy {
 			newGeneration()
 		}
 		
-		public static const MAX_BREEDS:uint = 10
+		public static const MAX_BREEDS:uint = 20
 		public static function newGeneration():void {
 			if ( allBreeds.length != 0 ) {
 				// Time to breed the best performers
@@ -40,13 +41,20 @@ package mutator.enemy {
 				allBreeds.splice(0, allBreeds.length)
 				
 				// Pick the top four best performers for breeding
-				var bestPerformers:Array = breedsSorted.splice(0, 4)
-				
+				var bestPerformers:Array
+				switch (breedsSorted[0].numberOfHits) {
+					case 0:
+						bestPerformers = breedsSorted.splice(0, MAX_BREEDS)
+						break
+					default:
+						bestPerformers = breedsSorted.splice(0, 6)
+						break
+				}				
 				var newDna:DnaArray
 				var newBreed:EnemyShip
 				
 				/// A LOT of randomization could go on here aswell
-				var breedTimes:uint = 4
+				var breedTimes:uint = 5
 				for (var i:int = 1; i < bestPerformers.length; i += 2) {					
 					for (var j:int = 0; j < breedTimes; j++) {
 						newDna = bestPerformers[i - 1].breed(bestPerformers[i])
@@ -56,6 +64,12 @@ package mutator.enemy {
 				}
 				if (newBreedChance.next().type == "y") {
 					allBreeds.push(EnemyShip.newBreed())
+					if (newBreedChance.next().type == "y") {
+						allBreeds.push(EnemyShip.newBreed())
+						if (newBreedChance.next().type == "y") {
+							allBreeds.push(EnemyShip.newBreed())
+						}
+					}				
 				}
 			} else {
 				// the first generation
@@ -88,7 +102,7 @@ package mutator.enemy {
 				breedStats.push(allBreeds[i].stats)
 				breedStats[i].averageTimeAlive
 			}
-			breedStats.sortOn("avgTimeAlive", Array.DESCENDING | Array.NUMERIC)
+			breedStats.sortOn(["numberOfHits", "avgTimeAlive"], Array.DESCENDING | Array.NUMERIC)
 			trace(breedStats)
 			return breedStats
 		}
@@ -98,7 +112,7 @@ package mutator.enemy {
 		}
 		
 		public function toString():String {
-			return String(avgTimeAlive)
+			return "[hits: " + numberOfHits + ", avgTimeAlive: " + avgTimeAlive + "]"
 		}
 	}
 	

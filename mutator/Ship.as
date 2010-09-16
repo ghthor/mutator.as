@@ -5,6 +5,7 @@
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import mutator.enemy.Missle;
+	import mutator.enemy.WeaponGene;
 	import mutator.form.GameScreen;
 	import mutator.form.Mutator;
 	import wcl.AccurateMovieClip;
@@ -214,10 +215,35 @@
 			return false
 		}
 		
+		public static const missleCollisonScaleDelta:Number = .05
+		public static const bulletKillScaleDelta:Number = -.025
+		
+		static const maxScale:Number = 10
+		static const minScale:Number = .3
+		
+		public function scale(delta:Number):void {
+			scaleX += delta
+			scaleY += delta
+			
+			if (scaleX < minScale) {
+				scaleX = minScale
+				scaleY = minScale
+			} else if (scaleX > maxScale) {
+				scaleX = maxScale
+				scaleY = maxScale
+			}
+			
+			GameScreen.gui_scale.text = scaleX.toString()
+			
+		}
+		
 		public function collideWith(other:Collidable):void{
 			switch(other.type()) {
 				case Missle.typeStr:
 					// Do Something
+					newBulletType()
+					scale(missleCollisonScaleDelta * 4 / scaleX)
+					WeaponGene.decreaseChance()
 					break
 			}
 		}

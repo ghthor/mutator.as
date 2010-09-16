@@ -32,6 +32,9 @@
 		static const NUMBER_OF_GENES:uint = 20
 		static const TICKS_PER_GENE:int = 10
 		
+		static var totalDeaths:int = 0
+		static const DEATHS_TO_EVOLVE:int = 60
+		
 		var geneTicks:uint = 0
 		var executeGene:uint = 0
 		
@@ -166,11 +169,19 @@
 		
 		private function death():void {
 			_isDead = true
-			allDead.push(this)
+			//allDead.push(this)
 			parent.removeChild(this)
 			
 			stats.amountOfDeaths++
 			stats.aliveTimes.push(ticksLived)
+			
+			/// Gameplay logic and Screen Updating
+			totalDeaths++
+			GameScreen.gui_kills_till_evolution.text = (DEATHS_TO_EVOLVE - totalDeaths).toFixed()
+			if (totalDeaths == DEATHS_TO_EVOLVE) {
+				totalDeaths = 0
+				BreedStats.newGeneration()
+			}
 		}
 		
 		var _isDead:Boolean = false
@@ -193,6 +204,8 @@
 			switch(other.type()) {
 				case "Bullet":
 					death()
+					WeaponGene.increaseChance()
+					GameScreen.decreaseSpawnTime()
 					break
 			}
 		}

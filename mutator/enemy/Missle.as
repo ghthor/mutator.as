@@ -42,7 +42,8 @@ package mutator.enemy {
 			super()
 		}
 		
-		public function initialize(atX:Number, atY:Number, targetX:Number, targetY:Number):void {
+		public function initialize(atX:Number, atY:Number, targetX:Number, targetY:Number, stats:BreedStats):void {
+			breedStats = stats
 			scaleX = .7
 			scaleY = .7
 			x = atX; y = atY
@@ -108,6 +109,7 @@ package mutator.enemy {
 			switch(other.type()) {
 				case Ship.typeStr:
 					destroy()
+					breedStats.numberOfHits++
 					// Update Breed Stats
 					break
 			}

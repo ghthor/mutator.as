@@ -160,6 +160,7 @@
 			switch(other.type()) {
 				case EnemyShip.typeStr:
 					destroyBullet()
+					GameScreen.ship.scale(Ship.bulletKillScaleDelta)
 					break
 			}
 		}
