@@ -47,17 +47,25 @@
 		public function fire(gameScreen:GameScreen):void {
 			var angle:Number = -105
 			var bullet:OrbitingBullet;
-			for (var i:int = 0; i < 5; i++) {
-				bullet = currentBulletType.clone()
-				bullet.initialize()
-				bullet.velocity.setToDegrees(angle)
-				bullet.x = FormManager.theStage.mouseX - bullet.xOffset()
-				bullet.y = FormManager.theStage.mouseY
-				gameScreen.bullets.push(bullet)
-				gameScreen.addChild(bullet)
-				angle += 5
-			}
-			
+			//for (var i:int = 0; i < 5; i++) {
+				//bullet = currentBulletType.clone()
+				//bullet.initialize()
+				//bullet.velocity.setToDegrees(angle)
+				//bullet.x = FormManager.theStage.mouseX - bullet.xOffset()
+				//bullet.y = FormManager.theStage.mouseY
+				//trace(bullet.x + " " + bullet.y)
+				//OrbitingBullet.allBullets.push(bullet)
+				//gameScreen.addChild(bullet)
+				//angle += 5
+			//}
+			bullet = currentBulletType.clone()
+			bullet.initialize()
+			bullet.velocity.setToDegrees( -90)
+			bullet.x = FormManager.theStage.mouseX - bullet.xOffset()
+			bullet.y = FormManager.theStage.mouseY
+			OrbitingBullet.allBullets.push(bullet)
+			gameScreen.addChild(bullet)
+			var tacos = 10
 			//return currentBulletType.clone()
 		}
 	}

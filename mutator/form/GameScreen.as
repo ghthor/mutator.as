@@ -10,6 +10,9 @@
 	import mutator.Bullet;
 	import mutator.BulletRotation;
 	import mutator.BulletSize;
+	import mutator.enemy.BreedStats;
+	import mutator.enemy.EnemyShip;
+	import mutator.enemy.GenePool;
 	import mutator.OrbitingBullet;
 	import mutator.Ship;
 	import mutator.statistic.Oscillator;
@@ -36,53 +39,26 @@
 			stop();
 		}
 		
-		public var bullets:Array = new Array()
-		
 		public function testingInit() {
-			FormManager.theStage.addEventListener(MouseEvent.MOUSE_DOWN, shipFireToggle)
-			FormManager.theStage.addEventListener(MouseEvent.MOUSE_UP, shipFireToggle)
 			//FormManager.theStage.addEventListener(MouseEvent.MOUSE_MOVE, newRandomBullet)
 			FormManager.theStage.addEventListener(KeyboardEvent.KEY_UP, keyUp)
 		}
 		
-		var pool:ExamplePool = new ExamplePool()
-		private function weightedPoolTest():void {
-			for (var i:int = 0; i < 20; i++) {
-				var item:Weight = pool.next()
-				trace(item)
-			}
-			trace(pool)
+		private function spawnEnemy(atX:Number, atY:Number, enemy:EnemyShip):void {
+			enemy.x = atX
+			enemy.y = atY
+			addChild(enemy)
+			//enemies.push(enemy)
+			EnemyShip.allAlive.push(enemy)
 		}
 		
 		var shipFiring:Boolean = false
-		private function shipFireToggle(e:MouseEvent):void {
-			shipFiring = !shipFiring
-		}
-		
-		private function spawnBullet(bullet:OrbitingBullet, atX:Number, atY:Number):void {
-			//var bullet:OrbitingBullet = ship.fire()
-			//bullet.x = e.stageX - bullet.xOffset()
-			//bullet.y = e.stageY
-			//bullet.x = atX - bullet.xOffset()
-			//bullet.y = atY
-			bullets.push(bullet)
-			addChild(bullet)
-		}
-		
-		private function newRandomBullet(e:MouseEvent):void {
-			var bullet:OrbitingBullet = new OrbitingBullet()
-			bullet.initialize()
-			bullet.randomize()
-			bullet.defaultVel()
-			bullets.push(bullet)
-			
-			bullet.x = e.stageX - bullet.xOffset()
-			bullet.y = e.stageY
-			addChild(bullet)
-		}
 		
 		/// Run After All Forms Have Been Created
 		public function initialize():void {
+			GenePool.initialize()
+			BreedStats.initialize()
+			
 			testingInit()
 			
 			ship.initialize()
@@ -90,33 +66,16 @@
 			addChild(ship);
 		}
 		
-		var Key_W = 87
-		var Key_A = 65
-		var Key_S = 83
-		var Key_D = 68
-		var Key_Z = 90
-		
 		private function keyDown(e:KeyboardEvent):void {
-			//trace("Key Down: " + e.keyCode)
-			switch (e.keyCode) {
-				case Key_W:
-				case Keyboard.UP:
-					break
-				case Key_S:
-				case Keyboard.DOWN:
-					break
-				case Key_A:
-				case Keyboard.LEFT:
-					break
-				case Key_D:
-				case Keyboard.RIGHT:
-					break
-				case Keyboard.ENTER:
-				case Keyboard.NUMPAD_ENTER:
-				case Keyboard.SPACE:
-					break
+			var char:String = String.fromCharCode(e.charCode)
+			switch(char) {
 				default:
-					trace("Key Down: " + e.keyCode)
+					//trace("Key Down: " + e.charCode)
+			}
+			switch(e.keyCode) {
+				case Keyboard.SPACE:
+					shipFiring = true
+					break
 			}
 		}
 		
@@ -126,36 +85,54 @@
 				case "a":
 					ship.newBullet()
 					break
-				case "t":
-					weightedPoolTest()
+				case "e":
+					spawnEnemy(RandomFloat.within(0, stage.stageWidth), 0, BreedStats.breedFromPool())
+					break
+				case "r":
+					BreedStats.sortBreeds()
+					break
+				case "n":
+					BreedStats.newGeneration()
 					break
 				default:
-					trace("Key Up: " + e.keyCode)
+					trace("Key Up: " + e.charCode)
+			}
+			switch(e.keyCode) {
+				case Keyboard.SPACE:
+					shipFiring = false
+					break
 			}
 		}
 		
+		var fireTickCount:int = 0
+		var ticksPerFire:int = 10
 		private function tick(e:Event):void {
 			
 			if (shipFiring) {
-				//spawnBullet(FormManager.theStage.mouseX, FormManager.theStage.mouseY)
-				ship.fire(this)
-			}
-			
-			var offscreens:Array = new Array()
-			var bullet:OrbitingBullet
-			for (var i:int = 0; i < bullets.length; i++) {
-				bullet = bullets[i]
-				bullet.tick(1.0)
-				
-				if ((bullet.x < 0 || bullet.x > FormManager.theStage.stageWidth) || (bullet.y < 0 || bullet.y > FormManager.theStage.stageHeight)) {
-					removeChild(bullet)
-					bullet.cleanUp()
-					offscreens.push(bullet)
+				fireTickCount++
+				if (fireTickCount == ticksPerFire) {
+					fireTickCount = 0
+					ship.fire(this)
 				}
 			}
-			for (var i:int = 0; i < offscreens.length; i++) {
-				bullets.splice(bullets.indexOf(offscreens[i]),1)
+			
+			var enemyShips:Array = EnemyShip.allAlive
+			for (var i:int = 0; i < enemyShips.length; i++) {
+				enemyShips[i].tick(1.0)
 			}
+			var allBullets:Array = OrbitingBullet.allBullets
+			for (var i:int = 0; i < allBullets.length; i++) {
+				allBullets[i].tick(1.0)
+				for (var j:int = 0; j < enemyShips.length; j++) {
+					if (enemyShips[j].chkCollide(allBullets[i])) {
+						enemyShips[j].collideWith(allBullets[i])
+						allBullets[i].collideWith(enemyShips[j])
+					}
+				}
+			}
+			
+			EnemyShip.cleanDead()
+			OrbitingBullet.cleanBullets()
 		}
 		
 		public function enableAllEvents():void{

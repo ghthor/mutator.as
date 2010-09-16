@@ -10,8 +10,24 @@ package mutator.enemy {
 	public dynamic class DnaArray extends Array
 	{
 		
-		public function breed(otherDna:DnaArray) {
+		public function breed(otherDna:DnaArray):DnaArray {
+			var newDna:DnaArray
 			
+			switch(Math.floor(RandomFloat.within(0, 4))) {
+				case 1:
+					newDna = breedInterlace(otherDna)
+					break
+				case 2:
+					newDna = breedRandom(otherDna)
+					break
+				case 3:
+					newDna = breedHalfAndHalf(otherDna)
+					break
+				default:
+					newDna = breedRandom(otherDna)
+					break
+			}
+			return newDna			
 		}
 		
 		// Assumes both Arrays are of the same length
@@ -100,12 +116,25 @@ package mutator.enemy {
 		}
 		
 		public function mutateReverse():void {
-			this = reverse()
+			// no way to implement this well, gonna have to write my own reverse
+			//this = reverse()
 		}
 		
 		public function randomIndex():int {
 			var randFloat:Number = RandomFloat.within(0, length)			
 			return Math.floor(randFloat)			
+		}
+		
+		public function geneAt(index:int):Gene {
+			return this[index] as Gene
+		}
+		
+		public function clone():DnaArray {
+			var clone:DnaArray = new DnaArray()
+			for (var i:int = 0; i < length; i++) {
+				clone.push(this[i].clone())
+			}
+			return clone
 		}
 		
 	}	

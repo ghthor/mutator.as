@@ -23,6 +23,10 @@
 			} else {
 				size = size_
 			}
+			// Update size and rotation
+			scaleX = size.scaleX
+			scaleY = size.scaleY
+			
 			if ( rotater_ == null) {
 				rotater = BulletRotation.New()
 			} else {

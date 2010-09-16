@@ -1,6 +1,8 @@
 package mutator.enemy {
 	import mutator.enemy.Gene;
 	import mutator.enemy.EnemyShip;
+	import wcl.math.RandomFloat;
+	import wcl.randomization.Weight;
 	
 	/**
 	 * ...
@@ -9,11 +11,12 @@ package mutator.enemy {
 	public class SplitGene implements Gene {
 		public static const type:String = "Split"
 		
-		public static var poolWeight:Weight = new Weight(0, type)
+		public static var poolWeight:Weight = new Weight(1, type)
 		
 		/* INTERFACE mutator.enemy.Gene */
 		
 		private var alreadySplit:Boolean = false
+		var chanceToSplit:Number = RandomFloat.within(0,10)
 		
 		public function enter(enemy:EnemyShip):void {
 			alreadySplit = false
@@ -25,7 +28,10 @@ package mutator.enemy {
 		
 		public function executeOn(enemy:EnemyShip):void {
 			if (!alreadySplit) {
-				// enemy.Split()
+				if (RandomFloat.within(0,100) <= chanceToSplit) {
+					trace("Spliting")
+					enemy.split()
+				}
 				alreadySplit = true
 			}
 		}

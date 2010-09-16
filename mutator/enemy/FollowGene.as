@@ -2,6 +2,7 @@ package mutator.enemy {
 	import mutator.enemy.EnemyShip;
 	import wcl.math.RandomFloat;
 	import wcl.math.Vector2D;
+	import wcl.randomization.Weight;
 	
 	/**
 	 * ...
@@ -10,13 +11,15 @@ package mutator.enemy {
 	public class FollowGene extends MovementGene implements Gene {
 		public static const type:String = "Follow"
 		
-		public static var poolWeight:Weight = new Weight(1, type)
+		public static var poolWeight:Weight = new Weight(0, type)
 		
-		static const MIN_FOLLOW_DIST:Number = 50
+		static const MIN_FOLLOW_DIST:Number = 100
+		static const BUFFER_ZONE:Number = 40
 		static const MAX_FOLLOW_DIST:Number = 400
-		static const MAX_FOLLOW_SPEED:Number = MAX_SPEED + 2
+		static const MIN_FOLLOW_ACCEL:Number = MIN_ACCEL - 2
+		static const MAX_FOLLOW_ACCEL:Number = MIN_ACCEL
 		
-		var followSpeed:Number = RandomFloat.within(MIN_SPEED, MAX_FOLLOW_SPEED)		
+		var followSpeed:Number = RandomFloat.within(MIN_FOLLOW_ACCEL, MAX_FOLLOW_ACCEL)		
 		
 		public function FollowGene():void {
 			super()
@@ -49,7 +52,7 @@ package mutator.enemy {
 			}
 			// No Ship within follow distance, use the default movement
 			if (shortestDistance.length >= MAX_FOLLOW_DIST) {
-				enemy.velocity.setByVector2D(movement)
+				super.executeOn(enemy)
 			} else { // There is a ship to follow
 				shortestDistance.makeLength(followSpeed)
 				enemy.velocity.setByVector2D(shortestDistance)

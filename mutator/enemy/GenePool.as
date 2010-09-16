@@ -9,15 +9,30 @@
 	public class GenePool extends WeightedPool {
 		private static var idCounter:uint = 0
 		
-		public function initialize():void {
-			addAnItemToPool(MovementGene.poolWeight)
-			addAnItemToPool(FollowGene.poolWeight)
-			addAnItemToPool(SplitGene.poolWeight)
+		public static var pool:GenePool = new GenePool()
+		
+		public function GenePool() {
+			super()
 		}
 		
-		override public function addItemToPool(item:Weight):void {
+		public static function initialize():void {
+			pool.addAnItemToPool(MovementGene.poolWeight)
+			pool.addAnItemToPool(FollowGene.poolWeight)
+			pool.addAnItemToPool(SplitGene.poolWeight)
+			pool.addAnItemToPool(ScaleGene.poolWeight)
+		}
+		
+		public function newDna():DnaArray {
+			var dna:DnaArray = new DnaArray()
+			for (var i:int = 0; i < EnemyShip.NUMBER_OF_GENES; i++) {
+				dna.push(geneFromType(next().type))
+			}
+			return dna
+		}
+		
+		override public function addAnItemToPool(item:Weight):void {
 			item.id = idCounter++
-			super(item)
+			super.addAnItemToPool(item)
 		}
 		
 		public static function geneFromType(type:String):Gene {
@@ -30,6 +45,9 @@
 					break
 				case SplitGene.type:
 					return new SplitGene()
+					break
+				case ScaleGene.type:
+					return new ScaleGene()
 					break
 				default:
 					return new MovementGene()
