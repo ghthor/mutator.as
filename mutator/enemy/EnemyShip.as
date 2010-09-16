@@ -1,6 +1,7 @@
 ﻿package mutator.enemy {
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
+	import mutator.form.GameScreen;
 	import wcl.AccurateMovieClip;
 	import wcl.collision.Collidable;
 	import wcl.form.FormManager;
@@ -68,7 +69,7 @@
 		}
 		
 		public function tick(percent:Number):void {
-			if (isOffscreen()) {
+			if (isOffscreen(GameScreen.SCREEN_EDGE_BUFFER/2)) {
 				death()
 				return
 			}

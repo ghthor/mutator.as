@@ -28,6 +28,8 @@
 	 */
 	public class GameScreen extends Form implements I_Form
 	{
+		
+		public static const SCREEN_EDGE_BUFFER:Number = 100
 		// useless atm
 		var canvas:Canvas = new Canvas()
 		
@@ -73,6 +75,18 @@
 				case Keyboard.SPACE:
 					shipFiring = true
 					break
+				case Keyboard.UP:
+					ship.toggleDirection("n", true)
+					break
+				case Keyboard.DOWN:
+					ship.toggleDirection("s", true)
+					break
+				case Keyboard.RIGHT:
+					ship.toggleDirection("e", true)
+					break
+				case Keyboard.LEFT:
+					ship.toggleDirection("w", true)
+					break
 			}
 		}
 		
@@ -80,7 +94,7 @@
 			var char:String = String.fromCharCode(e.charCode)
 			switch(char) {
 				case "a":
-					ship.newBullet()
+					ship.newBulletType()
 					break
 				case "e":
 					spawnEnemy(BreedStats.breedFromPool())
@@ -91,12 +105,22 @@
 				case "n":
 					BreedStats.newGeneration()
 					break
-				default:
-					trace("Key Up: " + e.charCode)
 			}
 			switch(e.keyCode) {
 				case Keyboard.SPACE:
 					shipFiring = false
+					break
+				case Keyboard.UP:
+					ship.toggleDirection("n", false)
+					break
+				case Keyboard.DOWN:
+					ship.toggleDirection("s", false)
+					break
+				case Keyboard.RIGHT:
+					ship.toggleDirection("e", false)
+					break
+				case Keyboard.LEFT:
+					ship.toggleDirection("w", false)
 					break
 			}
 		}
@@ -127,6 +151,8 @@
 					}
 				}
 			}
+			
+			ship.tick(1.0)
 			
 			EnemyShip.cleanDead()
 			OrbitingBullet.cleanBullets()

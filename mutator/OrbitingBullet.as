@@ -3,6 +3,7 @@
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import mutator.enemy.EnemyShip;
+	import mutator.form.GameScreen;
 	import mutator.projectile.Orbit;
 	import mutator.statistic.Oscillator;
 	import wcl.AccurateSprite;
@@ -108,7 +109,7 @@
 		}
 		
 		public function tick(percent:Number):void {
-			if (bullet.isOffscreen()) {
+			if (bullet.isOffscreen(GameScreen.SCREEN_EDGE_BUFFER)) {
 				destroyBullet()
 				return
 			}
