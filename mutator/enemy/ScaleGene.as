@@ -1,7 +1,8 @@
-﻿package mutator.enemy {
+package mutator.enemy {
 	import mutator.enemy.Gene;
 	import mutator.enemy.EnemyShip;
 	import mutator.statistic.Oscillator;
+	import wcl.math.RandomBool;
 	import wcl.math.RandomFloat;
 	import wcl.randomization.Weight;
 	
@@ -17,6 +18,7 @@
 		
 		public static const MIN:Number = .4
 		public static const MAX:Number = 1.5
+		public static const MUTATE_DELTA:Number = .1
 		
 		var scale:Oscillator
 		var target:Number
@@ -54,7 +56,13 @@
 		}
 		
 		public function mutate():void {
-			target = RandomFloat.within(MIN, MAX)
+			// Can produce scales outside of the MIN, MAX
+			// This is intends Behavior
+			if (RandomBool.next()) {
+				target += MUTATE_DELTA
+			} else {
+				target -+ MUTATE_DELTA
+			}
 		}		
 	}
 	
