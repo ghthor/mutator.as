@@ -9,13 +9,13 @@ package mutator.enemy {
 	public class StartAreaGene implements Gene {
 		
 		static const numberOfStartZones:uint = 10
-		static const startZoneLength:Number = 800 / 10
+		static const startZoneLength:Number = 800 / numberOfStartZones
 		
 		// This param is kept through a clone
 		var startZone:uint
 		
 		// This param is always randomized so they don't always spawn in exactly the same place
-		var startOffset:Number = RandomFloat.within(0, 800/ 10)
+		var startOffset:Number = RandomFloat.within(0, startZoneLength)
 		
 		public function StartAreaGene(startZone_:uint = numberOfStartZones) {
 			if (startZone_ == numberOfStartZones) {

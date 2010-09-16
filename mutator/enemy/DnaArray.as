@@ -8,8 +8,7 @@ package mutator.enemy {
 	 * @author ...
 	 */
 	public dynamic class DnaArray extends Array
-	{
-		
+	{		
 		var startGene:Gene
 		
 		public function breed(otherDna:DnaArray):DnaArray {
@@ -158,6 +157,7 @@ package mutator.enemy {
 		
 		public function clone():DnaArray {
 			var clone:DnaArray = new DnaArray()
+			clone.startGene = startGene.clone()
 			for (var i:int = 0; i < length; i++) {
 				clone.push(this[i].clone())
 			}
