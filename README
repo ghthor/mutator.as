@@ -1,0 +1,18 @@
+
+Goals - Live as long as possible
+No Win Condition Yet
+
+Mechanics -
+Everytime you score a kill the spawn time is slightly lowered
+Everytime the enemy hits you your ship size is increased
+Everytime you hit an enemy the chance of them spawning with weapons is higher
+This all eventually snowballs into an unwinable situation
+
+To compile the .fla you need my wcl.as source library in the .fla's sourcepath
+
+If you clone them side by side the wcl.as and mutator.as it will work magically, since the fla is setup for that right now
+
+git clone http://github.com/ghthor/mutator.as.git
+git clone http://github.com/ghthor/wcl.as.git
+
+And your good to go reading and hacking if you so desire
