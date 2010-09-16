@@ -32,7 +32,7 @@ package mutator.enemy {
 		public function executeOn(enemy:EnemyShip):void {
 			if (!alreadySplit) {
 				if (RandomFloat.within(0,100) <= chanceToSplit) {
-					trace("Spliting")
+					//trace("Spliting")
 					enemy.split()
 				}
 				alreadySplit = true
