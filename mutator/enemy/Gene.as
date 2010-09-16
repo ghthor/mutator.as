@@ -5,5 +5,6 @@
 		function exit(enemy:EnemyShip):void
 		function executeOn(enemy:EnemyShip):void
 		function clone():Gene
+		function mutate():void
 	}
 }

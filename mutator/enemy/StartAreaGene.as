@@ -45,7 +45,12 @@ package mutator.enemy {
 		public function clone():Gene{
 			var c:StartAreaGene = new StartAreaGene(startZone)
 			return c
-		}		
+		}
+		
+		public function mutate():void {
+			startZone = Math.floor(RandomFloat.within(0, numberOfStartZones))
+			startOffset = RandomFloat.within(0, startZoneLength)
+		}
 	}
 	
 }

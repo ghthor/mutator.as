@@ -40,6 +40,10 @@ package mutator.enemy {
 			return new SplitGene()
 		}
 		
+		public function mutate():void {
+			chanceToSplit = RandomFloat.within(0,10)
+		}
+		
 	}
 	
 }

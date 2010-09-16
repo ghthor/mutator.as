@@ -2,6 +2,8 @@ package mutator.enemy {
 	import mutator.enemy.Gene;
 	import wcl.math.RandomBool;
 	import wcl.math.RandomFloat;
+	import wcl.randomization.Weight;
+	import wcl.randomization.WeightedPool;
 	
 	/**
 	 * ...
@@ -10,6 +12,19 @@ package mutator.enemy {
 	public dynamic class DnaArray extends Array
 	{		
 		var startGene:Gene
+		
+		static var mutatePool:WeightedPool = new WeightedPool()
+		static var mutateChance:WeightedPool = new WeightedPool()
+		
+		public static function initialize():void {
+			mutatePool.addAnItemToPool(new Weight(4, "StartZone"))
+			mutatePool.addAnItemToPool(new Weight(1, "mutateIntoNewGene"))
+			mutatePool.addAnItemToPool(new Weight(1, "mutateGene"))
+			mutatePool.addAnItemToPool(new Weight(2, "mutateSwap"))
+			
+			mutateChance.addAnItemToPool(new Weight(2, "n"))
+			mutateChance.addAnItemToPool(new Weight(3, "y"))
+		}
 		
 		public function breed(otherDna:DnaArray):DnaArray {
 			var newDna:DnaArray
@@ -27,6 +42,10 @@ package mutator.enemy {
 				default:
 					newDna = breedRandom(otherDna)
 					break
+			}
+			
+			if (mutateChance.next().type == "y") {
+				newDna.mutate()
 			}
 			return newDna			
 		}
@@ -118,10 +137,35 @@ package mutator.enemy {
 		}
 		
 		public function mutate():void {
-			
+			switch(mutatePool.next().type) {
+				case "StartZone":
+					trace("Mutating StartZone")
+					mutateStartZone()
+					break
+				case "mutateIntoNewGene":
+					trace("Mutating mutateIntoNewGene")
+					mutateIntoNewGene()
+					break
+				case "mutateGene":
+					trace("Mutating mutateGene")
+					mutateGene()
+					break
+				case "mutateSwap":
+					trace("Mutating mutateSwap")
+					mutateSwap()
+					break
+				default:
+					trace("Mutating default")
+					mutateIntoNewGene()
+					break
+			}
 		}
 		
-		public function mutateSwap():void {
+		private function mutateStartZone():void {
+			startGene.mutate()
+		}
+		
+		private function mutateSwap():void {
 			_mutateSwap(randomIndex(), randomIndex())
 		}
 		
@@ -135,13 +179,17 @@ package mutator.enemy {
 			this[j] = temp
 		}
 		
-		public function mutateIntoNewGene():void {
-			var i:int = randomIndex()
-			
-			// i == newGene() // This needs access to a GenePool
+		private function mutateIntoNewGene():void {
+			var i:int = randomIndex()			
+			this[i] = GenePool.geneFromType(GenePool.pool.next().type) // This needs access to a GenePool
 		}
 		
-		public function mutateReverse():void {
+		private function mutateGene():void {
+			var i:int = randomIndex()
+			geneAt(i).mutate()
+		}
+		
+		private function mutateReverse():void {
 			// no way to implement this well, gonna have to write my own reverse
 			//this = reverse()
 		}

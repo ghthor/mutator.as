@@ -22,6 +22,7 @@
 			pool.addAnItemToPool(ScaleGene.poolWeight)
 			
 			StartAreaGene.initialize()
+			DnaArray.initialize()
 		}
 		
 		public function newDna():DnaArray {

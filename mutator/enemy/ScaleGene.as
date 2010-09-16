@@ -50,7 +50,9 @@ package mutator.enemy {
 			return c
 		}
 		
-		
+		public function mutate():void {
+			target = RandomFloat.within(MIN, MAX)
+		}		
 	}
 	
 }

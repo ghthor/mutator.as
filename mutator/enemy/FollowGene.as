@@ -59,6 +59,11 @@ package mutator.enemy {
 			}
 		}
 		
+		override public function mutate():void {
+			super.mutate()
+			followSpeed = RandomFloat.within(MIN_FOLLOW_ACCEL, MAX_FOLLOW_ACCEL)
+		}
+		
 	}
 	
 }

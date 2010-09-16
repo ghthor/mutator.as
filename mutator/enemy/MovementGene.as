@@ -49,5 +49,9 @@
 			return c
 		}
 		
+		public function mutate():void {
+			movement.setWithDegreesAndLength(RandomFloat.within(0,360), RandomFloat.within(MIN_ACCEL, MAX_ACCEL))
+		}
+		
 	}
 }
