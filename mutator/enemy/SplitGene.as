@@ -13,6 +13,9 @@ package mutator.enemy {
 		
 		public static var poolWeight:Weight = new Weight(1, type)
 		
+		public static const MUTATE_DELTA_MIN:Number = -2
+		public static const MUTATE_DELTA:Number = 5
+		
 		/* INTERFACE mutator.enemy.Gene */
 		
 		private var alreadySplit:Boolean = false
@@ -41,7 +44,9 @@ package mutator.enemy {
 		}
 		
 		public function mutate():void {
-			chanceToSplit = RandomFloat.within(0,10)
+			// Can mutate out of MIN/MAX values
+			// This is intended behavior
+			chanceToSplit += RandomFloat.within(MUTATE_DELTA_MIN, MUTATE_DELTA)
 		}
 		
 	}
