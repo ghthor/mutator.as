@@ -13,10 +13,12 @@
 	import mutator.enemy.BreedStats;
 	import mutator.enemy.EnemyShip;
 	import mutator.enemy.GenePool;
+	import mutator.enemy.Missle;
 	import mutator.enemy.ScaleGene;
 	import mutator.OrbitingBullet;
 	import mutator.Ship;
 	import mutator.statistic.Oscillator;
+	import wcl.collision.Collidable;
 	import wcl.form.*
 	import wcl.math.RandomBool;
 	import wcl.math.RandomFloat;
@@ -31,10 +33,13 @@
 	{
 		
 		public static const SCREEN_EDGE_BUFFER:Number = 100
+		public static const SCROLL_SPEED:Number = 5
+		public static var constMovement:Vector2D = new Vector2D(0, SCROLL_SPEED)
+		
 		// useless atm
 		var canvas:Canvas = new Canvas()
 		
-		var ship:Ship = new Ship()
+		public static var ship:Ship = new Ship()
 		
 		public var gui_lives:TextField;
 		
@@ -156,10 +161,20 @@
 				}
 			}
 			
+			var allMissles:Array = Missle.allMissles
+			for (var i:int = 0; i < allMissles.length; i++) {
+				allMissles[i].tick(1.0)
+				if (ship.chkCollide(allMissles[i] as Collidable)) {
+					ship.collideWith(allMissles[i] as Collidable)
+					allMissles[i].collideWith(ship)
+				}
+			}
+			
 			ship.tick(1.0)
 			
 			EnemyShip.cleanDead()
 			OrbitingBullet.cleanBullets()
+			Missle.cleanOutDead()
 		}
 		
 		public function enableAllEvents():void{

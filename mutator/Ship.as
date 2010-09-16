@@ -2,9 +2,11 @@
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
+	import mutator.enemy.Missle;
 	import mutator.form.GameScreen;
 	import mutator.form.Mutator;
 	import wcl.AccurateMovieClip;
+	import wcl.collision.Collidable;
 	import wcl.form.FormManager;
 	import wcl.math.Vector2D;
 	
@@ -12,7 +14,9 @@
 	 * ...
 	 * @author ...
 	 */
-	public class Ship extends AccurateMovieClip {
+	public class Ship extends AccurateMovieClip implements Collidable {
+		
+		public static const typeStr:String = "PlayerShip"
 		
 		private var bulletSpawnPoint:MovieClip;
 		public var currentBulletType:OrbitingBullet
@@ -185,6 +189,39 @@
 			bullet.y = y  //+ bulletSpawnPoint.y
 			OrbitingBullet.allBullets.push(bullet)
 			gameScreen.addChild(bullet)
+		}
+		
+		/* INTERFACE wcl.collision.Collidable */
+		
+		public function get isCollidable():Boolean{
+			return true
+		}
+		
+		public function chkCollide(other:Collidable):Boolean{
+			if (isCollidable && other.isCollidable) {
+				if (hitTestObject(other as DisplayObject)) {
+					var overlap:Rectangle = (other as DisplayObject).getBounds(stage).intersection(getBounds(stage))
+					var points:Array = new Array(overlap.topLeft, overlap.bottomRight, new Point(overlap.left, overlap.bottom), new Point(overlap.right, overlap.top), new Point(overlap.left + overlap.width / 2, overlap.top + overlap.height / 2))
+					for (var j:int = 0; j < points.length; j++) {
+						if ((other as DisplayObject).hitTestPoint(points[j].x, points[j].y, true)) {
+							return true
+						}
+					}
+				}
+			}
+			return false
+		}
+		
+		public function collideWith(other:Collidable):void{
+			switch(other.type()) {
+				case Missle.typeStr:
+					// Do Something
+					break
+			}
+		}
+		
+		public function type():String{
+			return typeStr
 		}
 	}
 	

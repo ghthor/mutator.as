@@ -29,8 +29,6 @@
 		public var velocity:Vector2D = new Vector2D()
 		public var acceleration:Vector2D = new Vector2D()
 		
-		public static var constMovement:Vector2D = new Vector2D(0,5)
-		
 		static const NUMBER_OF_GENES:uint = 20
 		static const TICKS_PER_GENE:int = 10
 		
@@ -96,8 +94,8 @@
 			y += velocity.y
 			
 			// add the constant velocity
-			x += constMovement.x
-			y += constMovement.y			
+			x += GameScreen.constMovement.x
+			y += GameScreen.constMovement.y			
 			
 			draw.graphics.lineStyle(2, 0xFF0000)
 			draw.graphics.moveTo(0, 0)
