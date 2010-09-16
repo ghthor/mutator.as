@@ -2,6 +2,8 @@
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import mutator.enemy.Missle;
 	import mutator.form.GameScreen;
 	import mutator.form.Mutator;

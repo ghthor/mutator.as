@@ -22,6 +22,7 @@
 	import wcl.form.*
 	import wcl.math.RandomBool;
 	import wcl.math.RandomFloat;
+	import wcl.math.Vector2D;
 	import wcl.randomization.ExamplePool;
 	import wcl.randomization.Weight;
 	import wcl.render.Canvas;
@@ -35,6 +36,11 @@
 		public static const SCREEN_EDGE_BUFFER:Number = 100
 		public static const SCROLL_SPEED:Number = 5
 		public static var constMovement:Vector2D = new Vector2D(0, SCROLL_SPEED)
+		
+		private static var me:GameScreen
+		public static function addObject(displayObject:DisplayObject):DisplayObject {
+			return me.addChild(displayObject)
+		}
 		
 		// useless atm
 		var canvas:Canvas = new Canvas()
@@ -61,6 +67,7 @@
 		
 		/// Run After All Forms Have Been Created
 		public function initialize():void {
+			me = this
 			GenePool.initialize()
 			BreedStats.initialize()
 			

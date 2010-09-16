@@ -1,4 +1,7 @@
 package mutator.enemy {
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import flash.display.DisplayObject;
 	import mutator.form.GameScreen;
 	import mutator.Ship;
 	import wcl.AccurateMovieClip;
@@ -11,23 +14,24 @@ package mutator.enemy {
 	 */
 	public class Missle extends AccurateMovieClip implements Collidable {
 		
-		public static const allMissles:Array = new Array()
+		public static var allMissles:Array = new Array()
 		
 		// The Breed that fired this missle
-		public var breedStats:BreedStats
+		public var breedStats:BreedStats			
+		var isDead:Boolean = false
 		
 		public static function cleanOutDead():void {
 			allMissles = allMissles.filter(_cleanOutMissles)
 		}
 		
 		private static function _cleanOutMissles(missle:Missle, index:int, arr:Array):Boolean {
-			return !isDead
+			return !missle.isDead
 		}
 		
 		public static const typeStr:String = "Missle"
 		
-		static const MAX_SPEED:Number = 11
-		static const MAX_ACCEL:Number = 2
+		static const MAX_SPEED:Number = 6
+		static const MAX_ACCEL:Number = 1
 		
 		var velocity:Vector2D = new Vector2D()
 		var acceleration:Vector2D = new Vector2D()
@@ -38,15 +42,11 @@ package mutator.enemy {
 			super()
 		}
 		
-		public function initialize(targetX:Number, targetY:Number):void {
+		public function initialize(atX:Number, atY:Number, targetX:Number, targetY:Number):void {
+			scaleX = .7
+			scaleY = .7
+			x = atX; y = atY
 			targetPoint.setVector2D(targetX, targetY)
-		}
-		
-		public function tick(percent:Number):void {
-			if (isOffscreen(GameScreen.SCREEN_EDGE_BUFFER)) {
-				destroy()
-				return
-			}
 			
 			var toTarget:Vector2D = new Vector2D(x,y)
 			toTarget.setToOffsetTo(targetPoint)
@@ -54,19 +54,33 @@ package mutator.enemy {
 			toTarget.scale(MAX_ACCEL)
 			
 			acceleration.setByVector2D(toTarget)
-			
+		}
+		
+		public static function spawn(missle:Missle):void {
+			GameScreen.addObject(missle)
+			allMissles.push(missle)
+		}
+		
+		public function tick(percent:Number):void {
+			if (isOffscreen(GameScreen.SCREEN_EDGE_BUFFER)) {
+				destroy()
+				return
+			}			
 			velocity.addVector2D(acceleration)
 			
 			velocity.capMagitudeAt(MAX_SPEED)
+			
+			rotation = velocity.toDegrees()
 			
 			x += velocity.x
 			y += velocity.y
 		}
 		
-		var isDead:Boolean = false
-		
 		function destroy():void {
 			isDead = true
+			if (parent != null) {
+				parent.removeChild(this)
+			}
 		}
 		
 		/* INTERFACE wcl.collision.Collidable */

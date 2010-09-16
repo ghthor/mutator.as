@@ -20,6 +20,7 @@
 			pool.addAnItemToPool(FollowGene.poolWeight)
 			pool.addAnItemToPool(SplitGene.poolWeight)
 			pool.addAnItemToPool(ScaleGene.poolWeight)
+			pool.addAnItemToPool(WeaponGene.poolWeight)
 			
 			StartAreaGene.initialize()
 			DnaArray.initialize()
@@ -52,6 +53,9 @@
 					break
 				case ScaleGene.type:
 					return new ScaleGene()
+					break
+				case WeaponGene.type:
+					return new WeaponGene()
 					break
 				default:
 					return new MovementGene()
