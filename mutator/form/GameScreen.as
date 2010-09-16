@@ -44,11 +44,8 @@
 			FormManager.theStage.addEventListener(KeyboardEvent.KEY_UP, keyUp)
 		}
 		
-		private function spawnEnemy(atX:Number, atY:Number, enemy:EnemyShip):void {
-			enemy.x = atX
-			enemy.y = atY
+		private function spawnEnemy(enemy:EnemyShip):void {
 			addChild(enemy)
-			//enemies.push(enemy)
 			EnemyShip.allAlive.push(enemy)
 		}
 		
@@ -86,7 +83,7 @@
 					ship.newBullet()
 					break
 				case "e":
-					spawnEnemy(RandomFloat.within(0, stage.stageWidth), 0, BreedStats.breedFromPool())
+					spawnEnemy(BreedStats.breedFromPool())
 					break
 				case "r":
 					BreedStats.sortBreeds()

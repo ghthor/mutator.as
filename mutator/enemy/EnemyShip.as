@@ -47,6 +47,7 @@
 				withDna = genePool.newDna()
 			}
 			dna = withDna
+			dna.startGene.executeOn(this)
 			dna.geneAt(executeGene).enter(this)
 			
 			stats = new BreedStats()

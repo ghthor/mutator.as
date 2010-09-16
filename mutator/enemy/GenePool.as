@@ -24,6 +24,7 @@
 		
 		public function newDna():DnaArray {
 			var dna:DnaArray = new DnaArray()
+			dna.startGene = new StartAreaGene()
 			for (var i:int = 0; i < EnemyShip.NUMBER_OF_GENES; i++) {
 				dna.push(geneFromType(next().type))
 			}

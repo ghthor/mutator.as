@@ -10,6 +10,8 @@ package mutator.enemy {
 	public dynamic class DnaArray extends Array
 	{
 		
+		var startGene:Gene
+		
 		public function breed(otherDna:DnaArray):DnaArray {
 			var newDna:DnaArray
 			
@@ -36,12 +38,23 @@ package mutator.enemy {
 			
 			var useOtherDna:Boolean = RandomBool.next()
 			
+			// Set the startGene
+			if (useOtherDna) {
+				newDna.startGene = otherDna.startGene.clone()
+				useOtherDna = !useOtherDna
+			} else {
+				newDna.startGene = startGene.clone()
+				useOtherDna = !useOtherDna
+			}
+			
+			// Set The Rest
 			for (var i:int = 0; i < length; i++) {
 				if (useOtherDna) {
 					newDna.push(otherDna[i].clone())
 					useOtherDna = !useOtherDna
 				} else {
 					newDna.push(this[i].clone())
+					useOtherDna = !useOtherDna
 				}
 			}
 			
@@ -53,13 +66,21 @@ package mutator.enemy {
 			
 			var useOtherDna:Boolean = RandomBool.next()
 			
-			for (var i:int = 0; i < length; i++) {
+			// Set the Start Gene
+			if (useOtherDna) {
+				newDna.startGene = otherDna.startGene.clone()
+			} else {
+				newDna.startGene = startGene.clone()
+			}
+			
+			// Set the Rest
+			for (var i:int = 0; i < length; i++) {				
+				useOtherDna = RandomBool.next()
 				if (useOtherDna) {
 					newDna.push(otherDna[i].clone())
 				} else {
 					newDna.push(this[i].clone())
 				}
-				useOtherDna = RandomBool.next()
 			}
 			
 			return newDna
@@ -70,8 +91,14 @@ package mutator.enemy {
 			
 			var useOtherDna:Boolean = RandomBool.next()
 			
+			if (useOtherDna) {
+				newDna.startGene = otherDna.startGene.clone()
+			} else {
+				newDna.startGene = startGene.clone()
+			}
+			
 			var i:int = 0
-			for (var i:int = 0; i < length/2; i++) {
+			for (i = 0; i < length/2; i++) {
 				if (useOtherDna) {
 					newDna.push(otherDna[i].clone())
 				} else {
