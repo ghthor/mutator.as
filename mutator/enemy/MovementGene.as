@@ -1,5 +1,6 @@
 ﻿package mutator.enemy {
 	import mutator.enemy.Gene;
+	import wcl.math.RandomBool;
 	import wcl.math.RandomFloat;
 	import wcl.math.Vector2D;
 	import wcl.randomization.Weight;
@@ -15,7 +16,10 @@
 		var movement:Vector2D
 		
 		static const MIN_ACCEL:Number = 5/50
-		static const MAX_ACCEL:Number = 10/50
+		static const MAX_ACCEL:Number = 10 / 50
+		
+		static const ANGLE_MUTATE_DELTA:Number = 10   // degrees
+		static const ACCEL_MUTATE_DELTA:Number = 1/50
 		public static const type:String = "Movement"
 		
 		public static var poolWeight:Weight = new Weight(5, type)
@@ -50,7 +54,19 @@
 		}
 		
 		public function mutate():void {
-			movement.setWithDegreesAndLength(RandomFloat.within(0,360), RandomFloat.within(MIN_ACCEL, MAX_ACCEL))
+			// Both of these can Mutate out of the MIN/MAX for each
+			// This is intended BehaviorZ
+			if (RandomBool.next()) {
+				movement.setToDegrees(movement.toDegrees() + ANGLE_MUTATE_DELTA)
+			} else {
+				movement.setToDegrees(movement.toDegrees() - ANGLE_MUTATE_DELTA)
+			}
+			
+			if (RandomBool.next()) {
+				movement.makeLength(movement.length + ACCEL_MUTATE_DELTA)
+			} else {
+				movement.makeLength(movement.length - ACCEL_MUTATE_DELTA)
+			}
 		}
 		
 	}
