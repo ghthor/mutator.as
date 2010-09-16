@@ -17,10 +17,10 @@ package mutator.enemy {
 		static var mutateChance:WeightedPool = new WeightedPool()
 		
 		public static function initialize():void {
-			mutatePool.addAnItemToPool(new Weight(4, "StartZone"))
+			mutatePool.addAnItemToPool(new Weight(5, "StartZone"))
 			mutatePool.addAnItemToPool(new Weight(1, "mutateIntoNewGene"))
-			mutatePool.addAnItemToPool(new Weight(1, "mutateGene"))
-			mutatePool.addAnItemToPool(new Weight(2, "mutateSwap"))
+			mutatePool.addAnItemToPool(new Weight(3, "mutateGene"))
+			mutatePool.addAnItemToPool(new Weight(1, "mutateSwap"))
 			
 			mutateChance.addAnItemToPool(new Weight(2, "n"))
 			mutateChance.addAnItemToPool(new Weight(3, "y"))
