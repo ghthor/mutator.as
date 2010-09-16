@@ -1,19 +1,26 @@
 package mutator.enemy {
 	import wcl.math.RandomFloat;
+	import wcl.randomization.Weight;
+	import wcl.randomization.WeightedPool;
 	
 	/**
 	 * ...
 	 * @author ...
 	 */
-	public class BreedStats {
-		static var allBreeds:Array = new Array()
+	public class BreedStats {		
 		var aliveTimes:Array = new Array()
 		var amountOfDeaths:Number = 0
 		public var avgTimeAlive:Number = 0
 		var dna:DnaArray
 		
+		static var allBreeds:Array = new Array()
+		static var newBreedChance:WeightedPool = new WeightedPool()
+		
 		public static function initialize():void {
 			newGeneration()
+			
+			newBreedChance.addAnItemToPool(new Weight(1, "y"))
+			newBreedChance.addAnItemToPool(new Weight(3, "n"))
 		}
 		
 		public static function resetWithFreshGeneration():void {
@@ -38,6 +45,7 @@ package mutator.enemy {
 				var newDna:DnaArray
 				var newBreed:EnemyShip
 				
+				/// A LOT of randomization could go on here aswell
 				var breedTimes:uint = 4
 				for (var i:int = 1; i < bestPerformers.length; i += 2) {					
 					for (var j:int = 0; j < breedTimes; j++) {
@@ -45,6 +53,9 @@ package mutator.enemy {
 						newBreed = EnemyShip.newBreed(newDna)
 						allBreeds.push(newBreed)
 					}					
+				}
+				if (newBreedChance.next().type == "y") {
+					allBreeds.push(EnemyShip.newBreed())
 				}
 			} else {
 				// the first generation
