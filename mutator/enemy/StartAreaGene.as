@@ -2,6 +2,7 @@ package mutator.enemy {
 	import mutator.enemy.Gene;
 	import mutator.enemy.EnemyShip;
 	import mutator.form.Mutator;
+	import wcl.math.RandomBool;
 	import wcl.math.RandomFloat;
 	
 	/// Every Enemy has to have 1 of these, so it has special meaning
@@ -48,8 +49,28 @@ package mutator.enemy {
 			return c
 		}
 		
+		// Now shifts the startZone based on location
+		// Max delta is 2 if the startZone is on one of the edges
 		public function mutate():void {
-			startZone = Math.floor(RandomFloat.within(0, numberOfStartZones))
+			if (startZone == (numberOfStartZones - 1)) {
+				if (RandomBool.next()) {
+					startZone -= 1
+				} else {
+					startZone -= 2
+				}
+			} else if ( startZone == 0) {
+				if (RandomBool.next()) {
+					startZone += 1
+				} else {
+					startZone += 2
+				}
+			} else {
+				if (RandomBool.next()) {
+					startZone -= 1
+				} else {
+					startZone += 1
+				}
+			}
 			startOffset = RandomFloat.within(0, startZoneLength)
 		}
 	}
