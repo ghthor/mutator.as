@@ -20,6 +20,8 @@
 			pool.addAnItemToPool(FollowGene.poolWeight)
 			pool.addAnItemToPool(SplitGene.poolWeight)
 			pool.addAnItemToPool(ScaleGene.poolWeight)
+			
+			StartAreaGene.initialize()
 		}
 		
 		public function newDna():DnaArray {
